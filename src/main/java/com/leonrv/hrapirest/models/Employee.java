@@ -11,13 +11,28 @@ public class Employee implements Serializable{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer EmployeeId;
 
+    @Column(nullable = false, length = 13)
     private String TaxIdNumber;
+
+    @Column(nullable = false, length = 60)
     private String Name;
+
+    @Column(nullable = false, length = 120)
     private String LastName;
+
+    @Column(nullable = false, columnDefinition = "DATE")
     private Date BirthDate;
+
+    @Column(nullable = false, length = 60)
     private String Email;
+
+    @Column(nullable = false, length = 20)
     private String CellPhone;
+
+    @Column(nullable = false)
     private Boolean IsActive;
+
+    @Column(nullable = false)
     private Date DateCreated;
 
     @OneToMany
