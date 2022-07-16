@@ -17,27 +17,27 @@ public abstract class GenericController<T, TID> {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<T>> findAll(){
+    public ResponseEntity<?> findAll(){
         return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<T> getById(@PathVariable TID id){
+    public ResponseEntity<?> getById(@PathVariable TID id){
         return ResponseEntity.ok(service.getById(id));
     }
 
     @PutMapping("")
-    public ResponseEntity<T> update(@RequestBody T updated){
+    public ResponseEntity<?> update(@RequestBody T updated){
         return ResponseEntity.ok(service.save(updated));
     }
 
     @PostMapping("")
-    public ResponseEntity<T> create(@RequestBody T created){
+    public ResponseEntity<?> create(@RequestBody T created){
         return ResponseEntity.ok(service.save(created));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable TID id){
+    public ResponseEntity<?> delete(@PathVariable TID id){
         service.delete(id);
         return ResponseEntity.ok("Ok");
     }

@@ -28,32 +28,46 @@ public class EmployeeController {
         };
     }
 
-    // @Override
-    /*
-     * 
-     */
     @GetMapping
-    public ResponseEntity<List<EmployeeDto>> findAll() {
-        List<EmployeeDto> employeeDtos = EmployeeDto.employeesToDtos(service.findAll());
-        return ResponseEntity.ok(employeeDtos);
+    public ResponseEntity<?> findAll(@RequestHeader Map<String, String> headers) {
+
+        Map<String, Object> responseMap = new HashMap<>();
+
+        if(ControllerUtils.validateAccess(headers)){
+            List<EmployeeDto> employeeDtos = EmployeeDto.employeesToDtos(service.findAll());
+            return ResponseEntity.ok(employeeDtos);
+        }else{
+            responseMap.put("error", "User or password incorrect");
+            return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
+        }
+        
     }
 
     @GetMapping("/all")
-    public List<Employee> findAllEmployees(){
+    public List<Employee> findAllEmployees(@RequestHeader Map<String, String> headers){
         return service.findAll();
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Employee employee) {
-        if (EmployeeUtils.validateRfc(employee.getTaxIdNumber())) {
-            try {
-                return ResponseEntity.ok(service.save(employee));
-            } catch (Exception e) {
+    public ResponseEntity<?> save(@RequestBody Employee employee, 
+    @RequestHeader Map<String, String> headers) {
+
+        Map<String, Object> responseMap = new HashMap<>();
+
+        if(ControllerUtils.validateAccess(headers)){
+            if (EmployeeUtils.validateRfc(employee.getTaxIdNumber())) {
+                try {
+                    return ResponseEntity.ok(service.save(employee));
+                } catch (Exception e) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                }
+            } else {
+                System.out.println("Fallo la validacion");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
-        } else {
-            System.out.println("Fallo la validacion");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }else{
+            responseMap.put("error", "User or password incorrect");
+            return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
         }
     }
 }
