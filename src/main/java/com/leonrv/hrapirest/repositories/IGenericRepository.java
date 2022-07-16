@@ -5,4 +5,4 @@ import org.springframework.data.repository.*;
 import org.springframework.stereotype.*;
 
 @NoRepositoryBean
-public interface IGenericRepository<T> extends JpaRepository<T, Long> {}
+public interface IGenericRepository<T, TID> extends JpaRepository<T, TID> {}

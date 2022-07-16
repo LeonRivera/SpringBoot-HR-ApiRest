@@ -7,12 +7,12 @@ import org.springframework.stereotype.*;
 import com.leonrv.hrapirest.repositories.*;;
 
 // @Service
-public abstract class GenericService<T> {
+public abstract class GenericService<T, TID> {
 
     // @Autowired
-    IGenericRepository<T> repository;
+    IGenericRepository<T, TID> repository;
 
-    public GenericService(IGenericRepository<T> repository){
+    public GenericService(IGenericRepository<T, TID> repository){
         this.repository = repository;
     }
 
@@ -24,7 +24,7 @@ public abstract class GenericService<T> {
         return repository.findAll();
     }
 
-    public T getById(Long id){
+    public T getById(TID id){
         return repository.findById(id).orElseThrow(null);
     }
 
@@ -32,7 +32,7 @@ public abstract class GenericService<T> {
         return repository.save(entity);
     }
 
-    public void delete(Long id){
+    public void delete(TID id){
         if(getById(id)!=null){
             repository.deleteById(id);
         }

@@ -36,6 +36,4 @@ public class Contract implements Serializable{
     @ManyToOne
     @JoinColumn(name = "ContractTypeId")
     private ContractType contractType;
-
-
 }

@@ -2,9 +2,13 @@
 --VALUES ('Leon', 90.69, '2008-7-04');
 
 
-SELECT * FROM model;
+-- SELECT * FROM model;
 
--- INSERT INTO ContractType (Name, Description, IsActive, DateCreated) VALUES
--- ('Permanent', 'Description', 'true', '2000-9-23'),
--- ('Fixed-Term', 'Description', 'true', '2000-9-23'),
--- ('External', 'Description', 'true', '2000-9-23');
+INSERT INTO contract_type (date_created,description, is_active, name) 
+VALUES
+('2022-07-15', 'Description', 1,'Permanent' ),
+('2022-07-15', 'Description', 1,'Fixed-Term' ),
+('2022-07-15', 'Description', 1,'External' );
+
+
+

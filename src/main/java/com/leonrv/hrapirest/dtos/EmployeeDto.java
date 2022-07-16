@@ -39,15 +39,29 @@ public class EmployeeDto {
             // });
 
             for(Employee e : employees){
-                employeeDtos.add(new EmployeeDto(
-                    e.getName() + " " + e.getLastName(),
-                    e.getTaxIdNumber(),
-                    e.getEmail(),
-                    EmployeeDto.getActiveContract(e).getContractType().getName(),
-                    EmployeeDto.getActiveContract(e).getDateFrom(),
-                    EmployeeDto.getActiveContract(e).getDateTo(),
-                    EmployeeDto.getActiveContract(e).getSalaryPerDay()
-                ));
+                
+                if(EmployeeDto.getActiveContract(e) != null) {
+                    employeeDtos.add(new EmployeeDto(
+                        e.getName() + " " + e.getLastName(),
+                        e.getTaxIdNumber(),
+                        e.getEmail(),
+                        EmployeeDto.getActiveContract(e).getContractType().getName(),
+                        EmployeeDto.getActiveContract(e).getDateFrom(),
+                        EmployeeDto.getActiveContract(e).getDateTo(),
+                        EmployeeDto.getActiveContract(e).getSalaryPerDay()
+                    ));
+                }else{
+                    employeeDtos.add(new EmployeeDto(
+                        e.getName() + " " + e.getLastName(),
+                        e.getTaxIdNumber(),
+                        e.getEmail(),
+                        null,
+                        null,
+                        null,
+                        null
+                    ));
+                }
+                
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
@@ -71,6 +85,7 @@ public class EmployeeDto {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace(System.out);
         }
 
         return contract;
