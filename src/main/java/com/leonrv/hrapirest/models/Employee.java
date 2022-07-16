@@ -11,7 +11,7 @@ public class Employee implements Serializable{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer EmployeeId;
 
-    @Column(nullable = false, length = 13)
+    @Column(nullable = false, length = 13, unique = true)
     private String TaxIdNumber;
 
     @Column(nullable = false, length = 60)
