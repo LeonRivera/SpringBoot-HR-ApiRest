@@ -35,7 +35,6 @@ public class Employee implements Serializable{
     @Column(nullable = false)
     private Date DateCreated;
 
-    @OneToMany
-    @JoinColumn(name = "EmployeeId")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "employee")
     private List<Contract> contracts;
 }

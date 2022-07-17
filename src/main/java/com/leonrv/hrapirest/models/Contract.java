@@ -34,6 +34,10 @@ public class Contract implements Serializable{
     private Date DateCreated;
 
     @ManyToOne
+    @JoinColumn(name = "EmployeeId")
+    private Employee employee;
+
+    @ManyToOne
     @JoinColumn(name = "ContractTypeId")
     private ContractType contractType;
 }

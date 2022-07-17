@@ -1,5 +1,11 @@
 package com.leonrv.hrapirest.repositories;
 
-import com.leonrv.hrapirest.models.Employee;
+import org.springframework.stereotype.Repository;
 
-public interface IEmployeeRepository extends IGenericRepository<Employee, Integer>{}
+import com.leonrv.hrapirest.models.*;
+
+@Repository
+public interface IEmployeeRepository extends IGenericRepository<Employee, Integer>{
+    Employee findByTaxIdNumber(String taxIdNumber);
+}
+

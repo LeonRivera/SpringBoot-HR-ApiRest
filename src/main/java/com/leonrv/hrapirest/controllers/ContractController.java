@@ -27,5 +27,33 @@ public class ContractController {
         this.serviceContract = new GenericService<Contract, Long>(repositoryContract) {
         };
     }
+
+
+    @PostMapping("/{id}")
+    public ResponseEntity<?> save(@RequestBody Contract contract,
+    @PathVariable Integer id, 
+    @RequestHeader Map<String, String> headers) {
+
+        Map<String, Object> responseMap = new HashMap<>();
+
+        if(ControllerUtils.validateAccess(headers)){
+
+            Employee employee=serviceEmployee.getById(id);
+            if(employee!=null){
+                contract.setEmployee(employee);
+                return ResponseEntity.ok(serviceContract.save(contract));
+            }else{
+                responseMap.put("error", "Employee doesn't exist");
+                return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.NOT_FOUND);
+            }
+
+        }else{
+            responseMap.put("error", "User or password incorrect");
+            return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
+
     
 }

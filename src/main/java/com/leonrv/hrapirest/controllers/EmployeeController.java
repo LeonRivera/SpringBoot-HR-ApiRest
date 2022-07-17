@@ -75,6 +75,26 @@ public class EmployeeController {
         }
     }
 
+    @PutMapping
+    public ResponseEntity<?> update(@RequestBody Employee employee,
+    @RequestHeader Map<String, String> headers){
+        Map<String, Object> responseMap = new HashMap<>();
+
+        if(ControllerUtils.validateAccess(headers)){
+
+            if(EmployeeUtils.validateRfc(employee.getTaxIdNumber())){
+                return ResponseEntity.ok(service.save(employee));
+            }else{
+                responseMap.put("error", "RFC (TaxIdNumber) Incorrect Format");
+                return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }else{
+            responseMap.put("error", "User or password incorrect");
+            return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
+        }
+
+    }
+
 
     @DeleteMapping("/disablecontractemployee/{id}")
     public ResponseEntity<?> disableValidContract(@PathVariable Integer id ,@RequestHeader Map<String, String> headers) {
