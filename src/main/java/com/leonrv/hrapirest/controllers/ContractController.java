@@ -11,8 +11,21 @@ import org.springframework.http.*;
 import com.leonrv.hrapirest.services.*;
 import com.leonrv.hrapirest.utils.*;
 
-@RequestMapping("/api/v1/employee")
+@RestController
+@RequestMapping("/api/v1/contract")
 @CrossOrigin("*")
 public class ContractController {
+
+
+    GenericService<Employee, Integer> serviceEmployee;
+    GenericService<Contract, Long> serviceContract;
+
+    public ContractController(IGenericRepository<Employee, Integer> repositoryEmployee,
+    IGenericRepository<Contract, Long> repositoryContract) {
+        this.serviceEmployee = new GenericService<Employee, Integer>(repositoryEmployee) {
+        };
+        this.serviceContract = new GenericService<Contract, Long>(repositoryContract) {
+        };
+    }
     
 }

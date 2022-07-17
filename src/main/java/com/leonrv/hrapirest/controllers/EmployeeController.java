@@ -22,9 +22,13 @@ import com.leonrv.hrapirest.utils.*;
 public class EmployeeController {
 
     GenericService<Employee, Integer> service;
+    GenericService<Contract, Long> serviceContract;
 
-    public EmployeeController(IGenericRepository<Employee, Integer> repository) {
+    public EmployeeController(IGenericRepository<Employee, Integer> repository,
+    IGenericRepository<Contract, Long> repositoryContract) {
         this.service = new GenericService<Employee, Integer>(repository) {
+        };
+        this.serviceContract = new GenericService<Contract, Long>(repositoryContract) {
         };
     }
 
@@ -69,5 +73,50 @@ public class EmployeeController {
             responseMap.put("error", "User or password incorrect");
             return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
         }
+    }
+
+
+    @DeleteMapping("/disablecontractemployee/{id}")
+    public ResponseEntity<?> disableValidContract(@PathVariable Integer id ,@RequestHeader Map<String, String> headers) {
+
+        Map<String, Object> responseMap = new HashMap<>();
+
+        if(ControllerUtils.validateAccess(headers)){
+
+            // Buscar al empleado por su id
+            Employee employee = service.getById(id);
+
+            // Buscar contrato vigente del empleado
+            Contract contract = EmployeeUtils.getActiveContract(employee);
+
+            //obteniendo del contexto
+            contract = serviceContract.getById(contract.getContractId());
+
+            // Actualizar el DateTo de su contrato 
+
+            if(contract!=null){
+                contract.setDateTo(new Date());
+
+                //actualizando
+                serviceContract.save(contract);
+
+                return ResponseEntity.ok(service.getById(id));
+
+            }else{
+                responseMap.put("error", "This employee doesn't have active contracts");
+                 return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
+                // error
+            }
+
+            // Actualizar empleado
+
+           
+
+           
+        }else{
+            responseMap.put("error", "User or password incorrect");
+            return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
+        }
+        
     }
 }

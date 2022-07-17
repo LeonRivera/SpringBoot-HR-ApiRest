@@ -8,6 +8,7 @@ import lombok.*;
 import com.leonrv.hrapirest.models.Contract;
 import com.leonrv.hrapirest.models.ContractType;
 import com.leonrv.hrapirest.models.Employee;
+import com.leonrv.hrapirest.utils.EmployeeUtils;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class EmployeeDto {
     
@@ -40,15 +41,15 @@ public class EmployeeDto {
 
             for(Employee e : employees){
                 
-                if(EmployeeDto.getActiveContract(e) != null) {
+                if(EmployeeUtils.getActiveContract(e) != null) {
                     employeeDtos.add(new EmployeeDto(
                         e.getName() + " " + e.getLastName(),
                         e.getTaxIdNumber(),
                         e.getEmail(),
-                        EmployeeDto.getActiveContract(e).getContractType().getName(),
-                        EmployeeDto.getActiveContract(e).getDateFrom(),
-                        EmployeeDto.getActiveContract(e).getDateTo(),
-                        EmployeeDto.getActiveContract(e).getSalaryPerDay()
+                        EmployeeUtils.getActiveContract(e).getContractType().getName(),
+                        EmployeeUtils.getActiveContract(e).getDateFrom(),
+                        EmployeeUtils.getActiveContract(e).getDateTo(),
+                        EmployeeUtils.getActiveContract(e).getSalaryPerDay()
                     ));
                 }else{
                     employeeDtos.add(new EmployeeDto(
@@ -70,25 +71,5 @@ public class EmployeeDto {
         return employeeDtos;
     }
 
-    public static Contract getActiveContract(Employee employee){
-        Contract contract = null;
-        try {
-            // employee.getContracts().forEach( c -> {
-            //     if(c.getIsActive()){
-            //         contract = c;
-            //     }
-            // });
-
-            for(Contract c : employee.getContracts()){
-                if(c.getIsActive()){
-                    contract = c;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-
-        return contract;
-        
-    }
+    
 }
