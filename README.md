@@ -4,9 +4,14 @@ Instructions
 
 1.- Open the scriptBd.sql  located in resources/scriptBd.sql and run it in MYSQL
 
-2.- Open the root folder of the project and execute the command: mvn clean install
+2.- In the src/main/resources/application.properties modify the next lines with your values of mysql login
 
-3.- Execute mvn-springboot:run 
+spring.datasource.username=YOUR_USERNAME
+spring.datasource.password=YOUR_PASSWORD
+
+3.- Open the root folder of the project and execute the command: mvn clean install
+
+4.- Execute mvn-springboot:run 
 
 
 ------------------
