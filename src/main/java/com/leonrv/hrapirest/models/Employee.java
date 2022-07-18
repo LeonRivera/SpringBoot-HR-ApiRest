@@ -12,7 +12,7 @@ public class Employee implements Serializable{
     private Integer EmployeeId;
 
     @Column(nullable = false, length = 13, unique = true)
-    private String TaxIdNumber;
+    private String taxIdNumber;
 
     @Column(nullable = false, length = 60)
     private String Name;
@@ -35,6 +35,6 @@ public class Employee implements Serializable{
     @Column(nullable = false)
     private Date DateCreated;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "employee")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
     private List<Contract> contracts;
 }

@@ -12,6 +12,11 @@ import org.springframework.http.*;
 import com.leonrv.hrapirest.services.*;
 import com.leonrv.hrapirest.utils.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 // public class EmployeeController extends GenericController<Employee, Integer> {
 //     public EmployeeController(IGenericRepository<Employee, Integer> repository) {
 //         super(repository);
@@ -19,124 +24,167 @@ import com.leonrv.hrapirest.utils.*;
 @RestController
 @RequestMapping("/api/v1/employee")
 @CrossOrigin("*")
+@Tag(description = "Employee Operations API Rest", name = "Employee Controller")
 public class EmployeeController {
 
-    GenericService<Employee, Integer> service;
-    GenericService<Contract, Long> serviceContract;
+    // GenericService<Employee, Integer> service;
+    // GenericService<Contract, Long> serviceContract;
 
-    public EmployeeController(IGenericRepository<Employee, Integer> repository,
-    IGenericRepository<Contract, Long> repositoryContract) {
-        this.service = new GenericService<Employee, Integer>(repository) {
-        };
-        this.serviceContract = new GenericService<Contract, Long>(repositoryContract) {
-        };
-    }
+    @Autowired
+    ContractService contractService;
+
+    @Autowired
+    EmployeeService employeeService;
+
+    // public EmployeeController(
+    // ) {
+    // IGenericRepository<Employee, Integer> repository = new
+    // IGenericRepository<Employee,Integer>() {
+    // };
+
+    // IGenericRepository<Contract, Long> repositoryContract = new
+    // IGenericRepository<Contract,Long>() {
+
+    // };
+
+    // this.service = new GenericService<Employee, Integer>(repository) {
+    // };
+    // this.serviceContract = new GenericService<Contract, Long>(repositoryContract)
+    // {
+    // };
+    // }
 
     @GetMapping
+    @Operation(summary = "List of all employees")
+    @ApiResponse(responseCode = "401", description = "User or password incorrect")
+    @ApiResponse(responseCode = "500", description = "Error")
     public ResponseEntity<?> findAll(@RequestHeader Map<String, String> headers) {
+
+        System.out.println(headers);
 
         Map<String, Object> responseMap = new HashMap<>();
 
-        if(ControllerUtils.validateAccess(headers)){
-            List<EmployeeDto> employeeDtos = EmployeeDto.employeesToDtos(service.findAll());
+        if (ControllerUtils.validateAccess(headers)) {
+            List<EmployeeDto> employeeDtos = EmployeeDto.employeesToDtos(employeeService.findAll());
             return ResponseEntity.ok(employeeDtos);
-        }else{
+        } else {
             responseMap.put("error", "User or password incorrect");
             return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
         }
-        
+
     }
 
-    @GetMapping("/all")
-    public List<Employee> findAllEmployees(@RequestHeader Map<String, String> headers){
-        return service.findAll();
-    }
+    // @GetMapping("/all")
+    // public List<Employee> findAllEmployees(@RequestHeader Map<String, String>
+    // headers){
+    // return employeeService.findAll();
+    // }
+
+    // @GetMapping("/rfc/{rfc}")
+    // public ResponseEntity<?> findByRfc(@PathVariable String rfc){
+    // System.out.println(rfc);
+    // return ResponseEntity.ok(employeeService.findByTaxIdNumber(rfc));
+    // }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Employee employee, 
-    @RequestHeader Map<String, String> headers) {
+    @Operation(summary = "Save a Employee")
+    @ApiResponse(responseCode = "401", description = "User or password incorrect")
+    @ApiResponse(responseCode = "500", description = "Error")
+    public ResponseEntity<?> save(
+            @RequestBody Employee employee,
+            @RequestHeader Map<String, String> headers) {
 
         Map<String, Object> responseMap = new HashMap<>();
 
-        if(ControllerUtils.validateAccess(headers)){
-            if (EmployeeUtils.validateRfc(employee.getTaxIdNumber())) {
-                try {
-                    return ResponseEntity.ok(service.save(employee));
-                } catch (Exception e) {
+        try {
+            if (ControllerUtils.validateAccess(headers)) {
+                if (EmployeeUtils.validateRfc(employee.getTaxIdNumber())) {
+                    try {
+                        return ResponseEntity.ok(employeeService.save(employee));
+                    } catch (Exception e) {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                    }
+                } else {
+                    System.out.println("Fallo la validacion");
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
                 }
             } else {
-                System.out.println("Fallo la validacion");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                responseMap.put("error", "User or password incorrect");
+                return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
             }
-        }else{
-            responseMap.put("error", "User or password incorrect");
-            return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+
     }
 
     @PutMapping
+    @Operation(summary = "Update a selected employee")
+    @ApiResponse(responseCode = "401", description = "User or password incorrect")
+    @ApiResponse(responseCode = "500", description = "Error")
     public ResponseEntity<?> update(@RequestBody Employee employee,
-    @RequestHeader Map<String, String> headers){
+            @RequestHeader Map<String, String> headers) {
         Map<String, Object> responseMap = new HashMap<>();
 
-        if(ControllerUtils.validateAccess(headers)){
+        try {
+            if (ControllerUtils.validateAccess(headers)) {
 
-            if(EmployeeUtils.validateRfc(employee.getTaxIdNumber())){
-                return ResponseEntity.ok(service.save(employee));
-            }else{
-                responseMap.put("error", "RFC (TaxIdNumber) Incorrect Format");
-                return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
+                if (EmployeeUtils.validateRfc(employee.getTaxIdNumber())) {
+                    return ResponseEntity.ok(employeeService.save(employee));
+                } else {
+                    responseMap.put("error", "RFC (TaxIdNumber) Incorrect Format");
+                    return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } else {
+                responseMap.put("error", "User or password incorrect");
+                return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
             }
-        }else{
-            responseMap.put("error", "User or password incorrect");
-            return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
     }
 
-
-    @DeleteMapping("/disablecontractemployee/{id}")
-    public ResponseEntity<?> disableValidContract(@PathVariable Integer id ,@RequestHeader Map<String, String> headers) {
+    @DeleteMapping("/disablecontract/{id}")
+    @Operation(summary = "Disable the valid contract of a selected employee")
+    @ApiResponse(responseCode = "401", description = "User or password incorrect")
+    @ApiResponse(responseCode = "500", description = "Error")
+    public ResponseEntity<?> disableValidContract(@PathVariable Integer id,
+            @RequestHeader Map<String, String> headers) {
 
         Map<String, Object> responseMap = new HashMap<>();
 
-        if(ControllerUtils.validateAccess(headers)){
+        try {
 
-            // Buscar al empleado por su id
-            Employee employee = service.getById(id);
+            if (ControllerUtils.validateAccess(headers)) {
 
-            // Buscar contrato vigente del empleado
-            Contract contract = EmployeeUtils.getActiveContract(employee);
+                Employee employee = employeeService.getById(id);
 
-            //obteniendo del contexto
-            contract = serviceContract.getById(contract.getContractId());
+                Contract contract = EmployeeUtils.getActiveContract(employee);
 
-            // Actualizar el DateTo de su contrato 
+                contract = contractService.getById(contract.getContractId());
 
-            if(contract!=null){
-                contract.setDateTo(new Date());
+                if (contract != null) {
+                    contract.setDateTo(new Date());
+                    contract.setIsActive(false);
 
-                //actualizando
-                serviceContract.save(contract);
+                    contractService.save(contract);
 
-                return ResponseEntity.ok(service.getById(id));
+                    return ResponseEntity.ok(employeeService.getById(id));
 
-            }else{
-                responseMap.put("error", "This employee doesn't have active contracts");
-                 return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
-                // error
+                } else {
+                    responseMap.put("error", "This employee doesn't have active contracts");
+                    return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+
+            } else {
+                responseMap.put("error", "User or password incorrect");
+                return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
             }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 
-            // Actualizar empleado
-
-           
-
-           
-        }else{
-            responseMap.put("error", "User or password incorrect");
-            return new ResponseEntity<Map<String, Object>>(responseMap, HttpStatus.UNAUTHORIZED);
         }
-        
+
     }
 }

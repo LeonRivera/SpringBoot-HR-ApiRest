@@ -6,6 +6,6 @@ import com.leonrv.hrapirest.models.*;
 
 @Repository
 public interface IEmployeeRepository extends IGenericRepository<Employee, Integer>{
-    Employee findByTaxIdNumber(String taxIdNumber);
+    Employee findFirstByTaxIdNumber(String taxIdNumber);
 }
 

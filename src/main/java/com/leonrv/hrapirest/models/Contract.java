@@ -3,6 +3,8 @@ import java.io.*;
 import java.util.*;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 // import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
@@ -35,6 +37,7 @@ public class Contract implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "EmployeeId")
+    @JsonIgnore
     private Employee employee;
 
     @ManyToOne
