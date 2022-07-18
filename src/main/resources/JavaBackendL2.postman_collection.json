@@ -1,0 +1,215 @@
+{
+	"info": {
+		"_postman_id": "8fda00bd-3ad8-4ace-af27-33d2b31b7195",
+		"name": "JavaBackendL2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1st Endpoint listado de empleados",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "user",
+						"value": "metaphorce",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "m3t4Ph0rc3",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/employee",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2nd Endpoint Agregar un contrato nuevo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "user",
+						"value": "metaphorce",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "m3t4Ph0rc3",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dateTo\": \"2022-07-16T06:15:00.000+00:00\",\r\n    \"dateCreated\": \"2022-07-16T20:46:09.000+00:00\",\r\n    \"isActive\": true,\r\n    \"dateFrom\": \"2022-07-16T20:46:09.000+00:00\",\r\n    \"salaryPerDay\": 30000.0,\r\n    \"contractType\": {\r\n        \"contractTypeId\": 1\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/contract/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"contract",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3rd Endpoint Agregar un nuevo empleado",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "user",
+						"value": "metaphorce",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "m3t4Ph0rc3",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n\r\n{\r\n    \"name\": \"NuevoEmpleado\",\r\n    \"taxIdNumber\": \"HFGD123421AD1\",\r\n    \"lastName\": \"Gomez\",\r\n    \"birthDate\": \"2001-09-03T05:00:00.000+00:00\",\r\n    \"cellPhone\": \"4152631263\",\r\n    \"isActive\": true,\r\n    \"dateCreated\": \"2022-07-16T20:46:09.000+00:00\",\r\n    \"email\": \"nuevo@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/employee",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4th Endpoint Actualizar los datos de un empleado",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "user",
+						"value": "metaphorce",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "m3t4Ph0rc3",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"employeeId\":1,\r\n    \"name\": \"Leon\",\r\n    \"taxIdNumber\": \"ABCD123456ID1\",\r\n    \"lastName\": \"Rivera\",\r\n    \"birthDate\": \"2001-09-03T05:00:00.000+00:00\",\r\n    \"cellPhone\": \"123434\",\r\n    \"isActive\": true,\r\n    \"dateCreated\": \"2022-07-16T20:46:09.000+00:00\",\r\n    \"email\": \"leonrivera@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/employee",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5th Endpoint Eliminar contrato vigente de un empleado",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "user",
+						"value": "metaphorce",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "m3t4Ph0rc3",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/employee/disablecontract/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee",
+						"disablecontract",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
