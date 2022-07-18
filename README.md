@@ -18,3 +18,7 @@ Open postman or install it from https://www.postman.com/downloads/
 In the field collections import the collection (.json) located in resources/JavaBackendL2.postman_collection.json
 
 Run the different endpoints with data pre created 
+
+------------------
+
+Documentation URL of the api = http://localhost:8080/swagger-ui/index.html#/
